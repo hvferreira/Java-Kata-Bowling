@@ -6,23 +6,30 @@ import java.util.HashMap;
 public class Bowling {
 
 
-    private final int MAXNUMROLL = 10;//total roll
-    private final int CONVERTERSLACH = -1;//total roll
+    private final int MAXNUMROLL = 10;
+    private final int CONVERTERSLACH = -1;
+    private final int POINTS30 = 30;
+    private final int FRAMETEN = 10;
+    private final int FRAMEEIGHT = 8;
+    private final int FRAMEELEVEN = 11;
+    private final int FIRSTPOSITIONFRAME = 0;
+    private final int SECONDTPOSITIONFRAME = 1;
     private ArrayList<Integer> frame;
     private int total; // total game
 
-    HashMap<Integer, Integer> boolStrike = new HashMap<>();
-    HashMap<Integer, Integer> boolSpace = new HashMap<>();
+    HashMap<Integer, Integer> boolStrike;
+    HashMap<Integer, Integer> boolSpace;
 
     public Bowling() {
         this.total = 0;
         frame = new ArrayList<Integer>();
+        boolStrike = new HashMap<>();
+        boolSpace = new HashMap<>();
     }
 
 
     public int total(String rolls) {
         sumRolls(rolls.split(" "));
-
         return sumFrames();
     }
 
@@ -31,32 +38,16 @@ public class Bowling {
 
         int num = 0;
         for (int i = 0; i < arrayRolls.length; i++) {
-            num = convertCharatertoInt(String.valueOf((arrayRolls[i].charAt(0))));
+            num = convertCharatertoInt(String.valueOf((arrayRolls[i].charAt(FIRSTPOSITIONFRAME))));
 
-            if (num == MAXNUMROLL && arrayRolls[i].charAt(0) == 'X') {
+            if (num == MAXNUMROLL && arrayRolls[i].charAt(FIRSTPOSITIONFRAME) == 'X') {
                 calculationStrike(num, i);
 
-            } else if (i != 10 && convertCharatertoInt(String.valueOf((arrayRolls[i].charAt(1)))) == CONVERTERSLACH) {
+            } else if (i != 10 && convertCharatertoInt(String.valueOf((arrayRolls[i].charAt(SECONDTPOSITIONFRAME)))) == CONVERTERSLACH) {
                 calculationSpare(num, i);
+
             } else {
-
-                if (boolSpace.containsKey(i - 1) && i != 10) {
-                    frame.set(i - 1, frame.get(i - 1) + num);
-                }
-
-                if (i != 10) {
-                    num = num + convertCharatertoInt(String.valueOf(arrayRolls[i].charAt(1)));
-                }
-
-
-                if (boolStrike.containsKey(i - 1)) {
-                    frame.set(i - 1, frame.get(i - 1) + num);
-                    if (boolStrike.containsKey(i - 2)) {
-                        frame.set(i - 2, frame.get(i - 2) + num);
-                    }
-                    frame.add(num);
-                } else
-                    frame.add(num);
+                calculationFrame(num, i, arrayRolls);
             }
         }
     }
@@ -72,10 +63,8 @@ public class Bowling {
     }
 
     private int sumFrames() {
-
         for (int i : frame) {
             total = total + i;
-            System.out.print(i + " ");
         }
         return total;
     }
@@ -93,8 +82,8 @@ public class Bowling {
             }
         } else if (i >= 10) { //for last frame
             frame.add(num);
-            if (boolStrike.containsKey(10) && boolStrike.containsKey(11) && boolStrike.containsKey(8)) {
-                frame.set(8, 30);
+            if (boolStrike.containsKey(FRAMETEN) && boolStrike.containsKey(FRAMEELEVEN) && boolStrike.containsKey(8)) {
+                frame.set(FRAMEEIGHT, POINTS30);
             }
         } else {
             if (boolSpace.containsKey(i - 1)) {
@@ -116,5 +105,23 @@ public class Bowling {
         }
         frame.add(num);
 
+    }
+
+    private void calculationFrame(int num, int i, String[] arrayRolls) {
+
+        if (boolSpace.containsKey(i - 1) && i != 10) {
+            frame.set(i - 1, frame.get(i - 1) + num);
+        }
+        if (i != 10) {
+            num = num + convertCharatertoInt(String.valueOf(arrayRolls[i].charAt(1)));
+        }
+        if (boolStrike.containsKey(i - 1)) {
+            frame.set(i - 1, frame.get(i - 1) + num);
+            if (boolStrike.containsKey(i - 2)) {
+                frame.set(i - 2, frame.get(i - 2) + num);
+            }
+            frame.add(num);
+        } else
+            frame.add(num);
     }
 }
