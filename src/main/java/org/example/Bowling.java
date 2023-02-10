@@ -41,17 +41,22 @@ public class Bowling {
                 calculationStrike(num, i);
 
 
-            } else if ((arrayRolls[i].charAt(1)) == CONVERTERSLACH) {
-
+            } else if (convertCharatertoInt(String.valueOf((arrayRolls[i].charAt(1)))) == CONVERTERSLACH) {
+                boolSpace.put(i, 1);
                 num = num + MAXNUMROLL - Integer.parseInt(String.valueOf(arrayRolls[i].charAt(0)));
                 frame.add(num);
             } else {
 
+                if (boolSpace.containsKey(i - 1)) {
+                    frame.set(i - 1, frame.get(i - 1) + num);
+                }
+
                 num = num + convertCharatertoInt(String.valueOf(arrayRolls[i].charAt(1)));
                 if (boolStrike.containsKey(i - 1)) {
                     frame.set(i - 1, frame.get(i - 1) + num);
-                }
-                frame.add(num);
+                    frame.add(num);
+                } else
+                    frame.add(num);
             }
         }
     }
@@ -76,7 +81,7 @@ public class Bowling {
     }
 
     private void calculationStrike(int num, int i) {
-        
+
         boolStrike.put(i, 1);
         if (boolStrike.containsKey(i - 1) && i < 10) {
             frame.set(i - 1, frame.get(i - 1) + num);
