@@ -38,22 +38,7 @@ public class Bowling {
             System.out.println();
 
             if (num == MAXNUMROLL && arrayRolls[i].charAt(0) == 'X') {
-                boolStrike.put(i, 1);
-                if (boolStrike.containsKey(i - 1)) {
-                    frame.set(i - 1, frame.get(i - 1) + num);
-                    if (boolStrike.containsKey(i - 2)) {
-                        frame.add(num);
-                        //frame.add(num + frame.get(i - 1) + num + frame.get(i - 2) + num);
-                        frame.set(i - 2, frame.get(i - 2) + num);
-                        //frame.set(i - 1, frame.get(i - 1) + num);
-                    } else {
-                        //frame.add(i - 1, frame.get(i - 1) + num);
-                        frame.add(num);
-                    }
-
-                } else {
-                    frame.add(num);
-                }
+                calculationStrike(num, i);
 
 
             } else if ((arrayRolls[i].charAt(1)) == CONVERTERSLACH) {
@@ -62,18 +47,13 @@ public class Bowling {
                 frame.add(num);
             } else {
 
-
                 num = num + convertCharatertoInt(String.valueOf(arrayRolls[i].charAt(1)));
                 if (boolStrike.containsKey(i - 1)) {
                     frame.set(i - 1, frame.get(i - 1) + num);
                 }
                 frame.add(num);
             }
-
-
         }
-
-
     }
 
     private int convertCharatertoInt(String roll) {
@@ -93,5 +73,26 @@ public class Bowling {
             System.out.print(i + " ");
         }
         return total;
+    }
+
+    private void calculationStrike(int num, int i) {
+        
+        boolStrike.put(i, 1);
+        if (boolStrike.containsKey(i - 1) && i < 10) {
+            frame.set(i - 1, frame.get(i - 1) + num);
+            if (boolStrike.containsKey(i - 2)) {
+                frame.add(num);
+                frame.set(i - 2, frame.get(i - 2) + num);
+            } else {
+                frame.add(num);
+            }
+        } else if (i >= 10) { //for last frame
+            frame.add(num);
+            if (boolStrike.containsKey(10) && boolStrike.containsKey(11) && boolStrike.containsKey(8)) {
+                frame.set(8, 30);
+            }
+        } else {
+            frame.add(num);
+        }
     }
 }

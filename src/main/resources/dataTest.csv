@@ -1,3 +1,5 @@
 input,output
+-- -- -- -- -- -- -- -- -- X X X,30
+-- -- -- -- -- -- -- X X X X X,90
+-- -- -- -- -- -- -- -- X X X X,60
 X X X X X X X X X X X X,300
-X X X X X X X X X --  ,240
