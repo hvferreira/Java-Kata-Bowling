@@ -30,30 +30,30 @@ public class Bowling {
     private void sumRolls(String[] arrayRolls) {
 
         int num = 0;
-
         for (int i = 0; i < arrayRolls.length; i++) {
             num = convertCharatertoInt(String.valueOf((arrayRolls[i].charAt(0))));
-
-
-            System.out.println();
 
             if (num == MAXNUMROLL && arrayRolls[i].charAt(0) == 'X') {
                 calculationStrike(num, i);
 
-
-            } else if (convertCharatertoInt(String.valueOf((arrayRolls[i].charAt(1)))) == CONVERTERSLACH) {
-                boolSpace.put(i, 1);
-                num = num + MAXNUMROLL - Integer.parseInt(String.valueOf(arrayRolls[i].charAt(0)));
-                frame.add(num);
+            } else if (i != 10 && convertCharatertoInt(String.valueOf((arrayRolls[i].charAt(1)))) == CONVERTERSLACH) {
+                calculationSpare(num, i);
             } else {
 
-                if (boolSpace.containsKey(i - 1)) {
+                if (boolSpace.containsKey(i - 1) && i != 10) {
                     frame.set(i - 1, frame.get(i - 1) + num);
                 }
 
-                num = num + convertCharatertoInt(String.valueOf(arrayRolls[i].charAt(1)));
+                if (i != 10) {
+                    num = num + convertCharatertoInt(String.valueOf(arrayRolls[i].charAt(1)));
+                }
+
+
                 if (boolStrike.containsKey(i - 1)) {
                     frame.set(i - 1, frame.get(i - 1) + num);
+                    if (boolStrike.containsKey(i - 2)) {
+                        frame.set(i - 2, frame.get(i - 2) + num);
+                    }
                     frame.add(num);
                 } else
                     frame.add(num);
@@ -97,7 +97,24 @@ public class Bowling {
                 frame.set(8, 30);
             }
         } else {
+            if (boolSpace.containsKey(i - 1)) {
+                frame.set(i - 1, frame.get(i - 1) + num);
+            }
             frame.add(num);
         }
+    }
+
+    private void calculationSpare(int num, int i) {
+        boolSpace.put(i, 1);
+        int firstCharacter = num;
+        if (boolSpace.containsKey(i - 1) && i != 10) {
+            frame.set(i - 1, frame.get(i - 1) + num);
+        }
+        num = num + MAXNUMROLL - num;
+        if (boolStrike.containsKey(i - 1) && 0 != firstCharacter) {
+            frame.set(i - 1, frame.get(i - 1) + num);
+        }
+        frame.add(num);
+
     }
 }
